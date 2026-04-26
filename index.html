@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Students</title>
+</head>
+<body>
+
+<h2>Add Student</h2>
+
+<form method="POST">
+  <input name="name" placeholder="Student Name" required>
+  <button>Add</button>
+</form>
+
+<h3>Student List</h3>
+<ul>
+  {% for s in students %}
+    <li>{{ s[1] }}</li>
+  {% endfor %}
+</ul>
+
+<a href="/mark">Mark Attendance</a>
+
+</body>
+</html>

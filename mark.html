@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Mark Attendance</title>
+</head>
+<body>
+
+<h2>Mark Attendance</h2>
+
+<form method="POST">
+  {% for s in students %}
+    <p>
+      {{ s[1] }}
+      <input type="radio" name="{{ s[0] }}" value="Present" required> Present
+      <input type="radio" name="{{ s[0] }}" value="Absent"> Absent
+    </p>
+  {% endfor %}
+
+  <button>Submit</button>
+</form>
+
+</body>
+</html>
