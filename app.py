@@ -28,14 +28,6 @@ def init_db():
     )
     ''')
 
-    cur.execute('''
-CREATE TABLE IF NOT EXISTS students(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    usn TEXT UNIQUE,
-    name TEXT
-)
-''')
-
     conn.commit()
     conn.close()
 
@@ -97,28 +89,6 @@ def report():
 
     return render_template("report.html", records=records)
 
-message = ""
-
-if request.method == "POST":
-    full_input = request.form.get('name')
-
-    if "-" not in full_input:
-        message = "Enter in format: USN - Name"
-    else:
-        usn, name = full_input.split("-", 1)
-        usn = usn.strip()
-        name = name.strip()
-
-        # Check duplicate USN
-        cur.execute("SELECT * FROM students WHERE usn = ?", (usn,))
-        if cur.fetchone():
-            message = "⚠️ USN already exists! Student already entered."
-        else:
-            cur.execute(
-                "INSERT INTO students(usn, name) VALUES(?, ?)",
-                (usn, name)
-            )
-            conn.commit()
 
 if __name__ == "__main__":
     # app.run(debug=True)
