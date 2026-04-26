@@ -1,12 +1,15 @@
 from flask import Flask, render_template, request, redirect
 import sqlite3
 from datetime import date
+import os
 
 app = Flask(__name__)
 
 # Create DB
 def init_db():
-    conn = sqlite3.connect('attendance.db')
+
+    DB_PATH = os.path.join(os.getcwd(), "attendance.db")
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     cur = conn.cursor()
 
     cur.execute('''
@@ -24,6 +27,14 @@ def init_db():
         date TEXT
     )
     ''')
+
+    cur.execute('''
+CREATE TABLE IF NOT EXISTS students(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usn TEXT UNIQUE,
+    name TEXT
+)
+''')
 
     conn.commit()
     conn.close()
@@ -86,5 +97,29 @@ def report():
 
     return render_template("report.html", records=records)
 
+message = ""
+
+if request.method == "POST":
+    full_input = request.form.get('name')
+
+    if "-" not in full_input:
+        message = "Enter in format: USN - Name"
+    else:
+        usn, name = full_input.split("-", 1)
+        usn = usn.strip()
+        name = name.strip()
+
+        # Check duplicate USN
+        cur.execute("SELECT * FROM students WHERE usn = ?", (usn,))
+        if cur.fetchone():
+            message = "⚠️ USN already exists! Student already entered."
+        else:
+            cur.execute(
+                "INSERT INTO students(usn, name) VALUES(?, ?)",
+                (usn, name)
+            )
+            conn.commit()
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
