@@ -15,7 +15,6 @@
     <form method="POST" class="mt-4">
       <div class="input-group">
         <input name="name" class="form-control" placeholder="Enter student name" required>
-        <input usn="usn" class="form-control" placeholder="Enter student USN" required>
         <button class="btn btn-success">Add Student</button>
       </div>
     </form>
@@ -23,17 +22,9 @@
     <h4 class="mt-4">Student List</h4>
     <ul class="list-group">
       {% for s in students %}
-        <li class="list-group-item">
-  {{ s[2] }} ({{ s[1] }})
-</li>
+        <li class="list-group-item">{{ s[1] }}</li>
       {% endfor %}
     </ul>
-
-    {% if message %}
-<div class="alert alert-warning mt-3">
-  {{ message }}
-</div>
-{% endif %}
 
     <div class="text-center mt-4">
       <a href="/mark" class="btn btn-primary">Mark Attendance</a>
